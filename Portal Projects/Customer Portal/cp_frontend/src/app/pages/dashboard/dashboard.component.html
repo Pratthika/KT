@@ -1,0 +1,139 @@
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2>Dash<span>board</span></h2>
+      <p>SAP Sales & Distribution Overview</p>
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <button [class.active]="activeTab==='charts'"     (click)="switchTab('charts')">📊 Analytics</button>
+    <button [class.active]="activeTab==='inquiries'"  (click)="switchTab('inquiries')">⊟ Inquiries</button>
+    <button [class.active]="activeTab==='orders'"     (click)="switchTab('orders')">⊞ Sale Orders</button>
+    <button [class.active]="activeTab==='deliveries'" (click)="switchTab('deliveries')">▷ Deliveries</button>
+  </div>
+
+  <div *ngIf="activeTab === 'charts'">
+    <div class="charts-loading" *ngIf="chartsLoading">
+      <div class="spinner"></div><span>Processing SAP Analytics...</span>
+    </div>
+
+    <div class="charts-grid" *ngIf="!chartsLoading">
+      <div class="chart-card wide">
+        <div class="chart-card-header">
+          <div class="chart-title">
+            <span class="chart-icon">📈</span>
+            <div>
+              <h4>Sales Value Trend</h4>
+              <p>Monthly order value from SAP</p>
+            </div>
+          </div>
+        </div>
+        <div class="chart-body">
+          <canvas baseChart [data]="salesTrendData" [options]="salesTrendOptions" type="line"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <div class="chart-title">
+            <span class="chart-icon">📦</span>
+            <div>
+              <h4>Top Materials</h4>
+              <p>By quantity sold</p>
+            </div>
+          </div>
+        </div>
+        <div class="chart-body">
+          <canvas baseChart [data]="materialBarData" [options]="materialBarOptions" type="bar"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <div class="chart-title">
+            <span class="chart-icon">🥧</span>
+            <div>
+              <h4>Order Status</h4>
+              <p>Current distribution</p>
+            </div>
+          </div>
+        </div>
+        <div class="chart-body">
+          <canvas baseChart [data]="statusPieData" [options]="statusPieOptions" type="pie"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="activeTab !== 'charts'">
+    
+    <div class="filter-bar" *ngIf="!loading">
+      <div class="search-input-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" [placeholder]="searchPlaceholder" [(ngModel)]="searchTerm" (input)="applyFilters()" />
+      </div>
+      <select class="filter-select" [(ngModel)]="statusFilter" (change)="applyFilters()">
+        <option value="">All Statuses</option>
+        <option *ngFor="let s of availableStatuses" [value]="s">{{ s }}</option>
+      </select>
+      <input type="date" class="filter-select" [(ngModel)]="dateFrom" (change)="applyFilters()" />
+      <input type="date" class="filter-select" [(ngModel)]="dateTo" (change)="applyFilters()" />
+      <button class="filter-clear-btn" (click)="clearFilters()">✕ Clear</button>
+      <span class="filter-results">{{ filteredCount }} record(s)</span>
+    </div>
+
+    <div class="loading-state" *ngIf="loading">
+      <div class="spinner"></div><span>Syncing with SAP ERP...</span>
+    </div>
+    <div class="error-banner" *ngIf="error">⚠ {{ error }}</div>
+
+    <div class="table-wrap" *ngIf="activeTab==='inquiries' && !loading">
+      <table *ngIf="filteredInquiries.length; else empty">
+        <thead><tr><th>Inquiry ID</th><th>Date</th><th>Material</th><th>Quantity</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let row of filteredInquiries">
+            <td class="mono">{{ row.inquiryId }}</td>
+            <td>{{ row.date }}</td>
+            <td>{{ row.material }}</td>
+            <td>{{ row.quantity | number }}</td>
+            <td><span class="status-chip" [ngClass]="statusClass(row.status)">{{ row.status }}</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-wrap" *ngIf="activeTab==='orders' && !loading">
+      <table *ngIf="filteredOrders.length; else empty">
+        <thead><tr><th>Order ID</th><th>Date</th><th>Material</th><th>Qty</th><th>Value</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let row of filteredOrders">
+            <td class="mono">{{ row.orderId }}</td>
+            <td>{{ row.date }}</td>
+            <td>{{ row.material }}</td>
+            <td>{{ row.quantity | number }}</td>
+            <td class="amount">{{ row.value | number:'1.2-2' }} {{ row.currency }}</td>
+            <td><span class="status-chip" [ngClass]="statusClass(row.status)">{{ row.status }}</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-wrap" *ngIf="activeTab==='deliveries' && !loading">
+      <table *ngIf="filteredDeliveries.length; else empty">
+        <thead><tr><th>Delivery ID</th><th>Date</th><th>Material</th><th>Qty</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let row of filteredDeliveries">
+            <td class="mono">{{ row.deliveryId }}</td>
+            <td>{{ row.date }}</td>
+            <td>{{ row.material }}</td>
+            <td>{{ row.quantity | number }}</td>
+            <td><span class="status-chip" [ngClass]="statusClass(row.status)">{{ row.status }}</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <ng-template #empty><div class="empty-state">No records found.</div></ng-template>
+</div>
