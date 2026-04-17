@@ -1,0 +1,29 @@
+<div class="app-shell">
+  <nav class="sidebar" *ngIf="isLoggedIn">
+    <div class="sidebar-brand">
+      <img class="brand-logo" src="/kaartech-logo.png" alt="KaarTech" />
+      <div class="brand-portal-label">Customer Portal</div>
+    </div>
+
+    <div class="nav-section">
+      <a routerLink="/dashboard" routerLinkActive="active">
+        <span class="nav-icon">⊞</span> Dashboard
+      </a>
+      <a routerLink="/profile" routerLinkActive="active">
+        <span class="nav-icon">◎</span> My Profile
+      </a>
+      <a routerLink="/finance" routerLinkActive="active">
+        <span class="nav-icon">◈</span> Financials
+      </a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="customer-chip">{{ customerId }}</div>
+      <button class="logout-btn" (click)="logout()">Sign Out</button>
+    </div>
+  </nav>
+
+  <main [class.full-width]="!isLoggedIn">
+    <router-outlet></router-outlet>
+  </main>
+</div>
