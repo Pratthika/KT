@@ -1,0 +1,61 @@
+<div class="login-page">
+  <div class="login-left">
+    <div class="left-content">
+      <img class="left-logo" src="/kaartech-logo.png" alt="KaarTech" />
+      <h1>Customer<br>Portal</h1>
+      <p>Access your complete transaction history, sales data, and financial records in one place.</p>
+      <div class="feature-list">
+        <div class="feature-item"><span>⊞</span> Sales &amp; Delivery Tracking</div>
+        <div class="feature-item"><span>◈</span> Financial Statements</div>
+        <div class="feature-item"><span>◎</span> Customer Profile Management</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-right">
+    <div class="login-card">
+      <div class="card-header">
+        <img class="logo-right" src="/kaartech-logo.png" alt="KaarTech" />
+        <h2>Sign In</h2>
+        <p>Enter your Customer ID and password to continue</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="field-group">
+          <label for="customerId">Customer ID</label>
+          <div class="input-wrap" [class.has-error]="f['customerId'].touched && f['customerId'].invalid">
+            <span class="input-prefix">◎</span>
+            <input id="customerId" formControlName="customerId"
+              type="text" placeholder="e.g. CUST-00123" autocomplete="username" />
+          </div>
+          <span class="field-error" *ngIf="f['customerId'].touched && f['customerId'].errors?.['required']">
+            Customer ID is required
+          </span>
+        </div>
+
+        <div class="field-group">
+          <label for="password">Password</label>
+          <div class="input-wrap" [class.has-error]="f['password'].touched && f['password'].invalid">
+            <span class="input-prefix">◈</span>
+            <input id="password" formControlName="password"
+              [type]="showPassword ? 'text' : 'password'"
+              placeholder="••••••••" autocomplete="current-password" />
+            <button type="button" class="toggle-pw" (click)="showPassword = !showPassword">
+              {{ showPassword ? '🙈' : '👁' }}
+            </button>
+          </div>
+          <span class="field-error" *ngIf="f['password'].touched && f['password'].errors?.['required']">
+            Password is required
+          </span>
+        </div>
+
+        <div class="server-error" *ngIf="errorMsg">⚠ {{ errorMsg }}</div>
+
+        <button type="submit" class="submit-btn" [disabled]="loading">
+          <span *ngIf="!loading">SIGN IN →</span>
+          <span *ngIf="loading" class="btn-spinner"></span>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
