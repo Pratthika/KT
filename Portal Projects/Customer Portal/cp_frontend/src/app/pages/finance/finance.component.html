@@ -1,0 +1,192 @@
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2>Financial <span>Sheet</span></h2>
+      <p>Financial analytics and transaction records from SAP ERP</p>
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <button [class.active]="activeTab==='charts'"   (click)="switchTab('charts')">📊 Analytics</button>
+    <button [class.active]="activeTab==='invoices'" (click)="switchTab('invoices')">◈ Invoices</button>
+    <button [class.active]="activeTab==='payments'" (click)="switchTab('payments')">⊡ Payments &amp; Aging</button>
+    <button [class.active]="activeTab==='memos'"    (click)="switchTab('memos')">↕ Cr/Dr Memo</button>
+    <button [class.active]="activeTab==='sales'"    (click)="switchTab('sales')">◎ Overall Sales</button>
+  </div>
+
+  <div *ngIf="activeTab === 'charts'">
+    <div class="loading-state" *ngIf="loading">
+      <div class="spinner"></div><span>Building financial charts...</span>
+    </div>
+
+    <div class="charts-grid" *ngIf="!loading">
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <div class="chart-title">
+            <span class="chart-icon">📈</span>
+            <div>
+              <h4>Revenue Trend</h4>
+              <p>Monthly invoiced totals ({{currency}})</p>
+            </div>
+          </div>
+        </div>
+        <div class="chart-body">
+          <canvas baseChart [data]="invoiceTrendData" [options]="invoiceTrendOptions" type="line"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <div class="chart-title">
+            <span class="chart-icon">🥧</span>
+            <div>
+              <h4>Aging Analysis</h4>
+              <p>Credit risk buckets</p>
+            </div>
+          </div>
+        </div>
+        <div class="chart-body chart-body-pie">
+          <canvas baseChart [data]="agingPieData" [options]="agingPieOptions" type="pie"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <div class="chart-title">
+            <span class="chart-icon">🍩</span>
+            <div>
+              <h4>Payment Status</h4>
+              <p>Paid vs Pending vs Overdue</p>
+            </div>
+          </div>
+        </div>
+        <div class="chart-body chart-body-pie">
+          <canvas baseChart [data]="paymentDoughnutData" [options]="paymentDoughnutOptions" type="doughnut"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <div class="chart-title">
+            <span class="chart-icon">↕</span>
+            <div>
+              <h4>Credit vs Debit</h4>
+              <p>Monthly value adjustments</p>
+            </div>
+          </div>
+        </div>
+        <div class="chart-body">
+          <canvas baseChart [data]="memoBarData" [options]="memoBarOptions" type="bar"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="activeTab !== 'charts'">
+    
+    <div class="filter-bar" *ngIf="activeTab !== 'sales' && !loading">
+      <div class="search-input-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Search by ID..." [(ngModel)]="searchTerm" (input)="applyFilters()" />
+      </div>
+      
+      <select class="filter-select" [(ngModel)]="statusFilter" (change)="applyFilters()" *ngIf="activeTab === 'invoices'">
+        <option value="">All Statuses</option>
+        <option *ngFor="let s of availableStatuses" [value]="s">{{ s }}</option>
+      </select>
+
+      <select class="filter-select" [(ngModel)]="memoTypeFilter" (change)="applyFilters()" *ngIf="activeTab === 'memos'">
+        <option value="">All Types</option>
+        <option value="CREDIT">Credit</option>
+        <option value="DEBIT">Debit</option>
+      </select>
+
+      <input type="date" class="filter-select" [(ngModel)]="dateFrom" (change)="applyFilters()" />
+      <input type="date" class="filter-select" [(ngModel)]="dateTo" (change)="applyFilters()" />
+      <button class="filter-clear-btn" (click)="clearFilters()">✕ Clear</button>
+      <span class="filter-results">{{ filteredCount }} record(s)</span>
+    </div>
+
+    <div class="loading-state" *ngIf="loading">
+      <div class="spinner"></div><span>Fetching from SAP ERP...</span>
+    </div>
+    
+    <div class="error-banner" *ngIf="error">⚠ {{ error }}</div>
+
+    <div class="table-wrap" *ngIf="activeTab==='invoices' && !loading">
+      <table *ngIf="filteredInvoices.length; else empty">
+        <thead><tr><th>Invoice ID</th><th>Date</th><th>Amount</th><th>Currency</th><th>Status</th><th style="text-align: center;">Action</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let row of filteredInvoices">
+            <td class="mono">{{ row.invoiceId }}</td>
+            <td>{{ row.date }}</td>
+            <td class="amount">{{ row.amount | number:'1.2-2' }}</td>
+            <td>{{ row.currency }}</td>
+            <td><span class="status-chip" [ngClass]="invoiceStatusClass(row.status)">{{ row.status }}</span></td>
+            <td style="text-align: center;">
+              <button class="pdf-download-btn" (click)="downloadInvoice(row.invoiceId)">
+                Download PDF
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-wrap" *ngIf="activeTab==='payments' && !loading">
+      <div class="aging-legend">
+        <span class="dot green"></span>Not Due &nbsp;
+        <span class="dot yellow"></span>1–30 days &nbsp;
+        <span class="dot red"></span>30+ days
+      </div>
+      <table *ngIf="filteredPayments.length; else empty">
+        <thead><tr><th>Payment ID</th><th>Billing Date</th><th>Amount</th><th>Aging</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let row of filteredPayments">
+            <td class="mono">{{ row.paymentId }}</td>
+            <td>{{ row.billingDate }}</td>
+            <td class="amount">{{ row.amount | number:'1.2-2' }} {{ row.currency }}</td>
+            <td><span class="status-chip" [ngClass]="agingClass(row.aging)">{{ row.aging }} days</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-wrap" *ngIf="activeTab==='memos' && !loading">
+      <table *ngIf="filteredMemos.length; else empty">
+        <thead><tr><th>Memo ID</th><th>Type</th><th>Date</th><th>Amount</th><th>Reason</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let row of filteredMemos">
+            <td class="mono">{{ row.memoId }}</td>
+            <td>
+              <span class="memo-chip" [class.credit]="row.type.toUpperCase()==='CREDIT'" [class.debit]="row.type?.toUpperCase()==='DEBIT'">
+                {{ row.type }}
+              </span>
+            </td>
+            <td>{{ row.date }}</td>
+            <td class="amount">{{ row.amount | number:'1.2-2' }} {{ row.currency }}</td>
+            <td class="reason-cell">{{ row.reason }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="activeTab==='sales' && !loading && overallSales">
+      <div class="summary-cards">
+        <div class="summary-card">
+          <div class="summary-label">Total Orders</div>
+          <div class="summary-value">{{ overallSales.totalOrders | number }}</div>
+        </div>
+        <div class="summary-card highlight">
+          <div class="summary-label">Total Revenue</div>
+          <div class="summary-value">{{ overallSales.totalValue | number:'1.2-2' }}</div>
+          <div class="summary-sub">{{ currency }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #empty>
+    <div class="empty-state" *ngIf="!loading">No records match your filters.</div>
+  </ng-template>
+</div>
