@@ -1,0 +1,30 @@
+<div class="page">
+  <div class="page-header">
+    <div class="page-header-left">
+      <h2>My <span>Profile</span></h2>
+      <p>Customer master data from SAP ERP</p>
+    </div>
+  </div>
+  <div class="loading-state" *ngIf="loading">
+    <div class="spinner"></div><span>Fetching profile from SAP...</span>
+  </div>
+
+  <div class="error-banner" *ngIf="error">⚠ {{ error }}</div>
+
+  <div class="profile-layout" *ngIf="profile && !loading">
+    <div class="profile-hero">
+      <div class="avatar">{{ profile?.name ? profile.name.charAt(0).toUpperCase() : '?' }}</div>
+      <h3>{{ profile.name }}</h3>
+      <div class="cust-id-chip">Customer ID: {{ profile.customerId }}</div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-card"><div class="info-label">Email Address</div><div class="info-value">{{ profile.email }}</div></div>
+      <div class="info-card"><div class="info-label">Phone Number</div><div class="info-value">{{ profile.phone }}</div></div>
+      <div class="info-card"><div class="info-label">Street Address</div><div class="info-value">{{ profile.address }}</div></div>
+      <div class="info-card"><div class="info-label">City</div><div class="info-value">{{ profile.city }}</div></div>
+      <div class="info-card"><div class="info-label">Country</div><div class="info-value">{{ profile.country }}</div></div>
+      <div class="info-card"><div class="info-label">Currency</div><div class="info-value">{{ profile.currency }}</div></div>
+    </div>
+  </div>
+</div>
