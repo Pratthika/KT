@@ -1,0 +1,105 @@
+.topbar {
+  position: fixed;
+  top: 0;
+  left: var(--sidebar-width);
+  right: 0;
+  height: var(--topbar-height);
+  background: rgba(255,255,255,0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--kt-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  z-index: 50;
+  transition: left 0.25s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+}
+
+/* Left — breadcrumb area */
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.topbar-divider-v {
+  width: 1px; height: 20px;
+  background: var(--kt-border);
+}
+.topbar-page-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--kt-dark-grey);
+}
+.topbar-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--kt-near-black);
+  letter-spacing: -0.025em;
+}
+
+/* Right */
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.topbar-date {
+  font-size: 11px;
+  color: var(--kt-dark-grey);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.topbar-divider {
+  width: 1px; height: 22px;
+  background: var(--kt-border);
+}
+
+/* User pill */
+.topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 14px 6px 7px;
+  border-radius: 30px;
+  background: var(--kt-white);
+  border: 1.5px solid var(--kt-border);
+  box-shadow: var(--shadow-sm);
+  cursor: default;
+  transition: border-color var(--transition);
+}
+.topbar-user:hover {
+  border-color: rgba(157,1,2,0.3);
+}
+.user-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--kt-red), var(--kt-orange));
+  color: white;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 6px rgba(157,1,2,0.35);
+  flex-shrink: 0;
+}
+.user-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--kt-charcoal);
+}
+
+/* KaarTech brand accent stripe at very top */
+.topbar::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--kt-red), var(--kt-orange), var(--kt-red));
+  background-size: 200% 100%;
+  animation: shimmerBar 3s linear infinite;
+}
+@keyframes shimmerBar {
+  0%   { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
+}

@@ -1,0 +1,29 @@
+<header class="topbar">
+
+  <div class="topbar-left">
+
+    <h1 class="topbar-title">{{ pageTitle }}</h1>
+
+  </div>
+
+  <div class="topbar-right">
+
+    <div class="topbar-date">
+
+      {{ today | date:'EEEE, MMM d, yyyy' }}
+
+    </div>
+
+    <div class="topbar-divider"></div>
+
+    <div class="topbar-user">
+
+      <div class="user-avatar">{{ vendorName[0] }}</div>
+
+      <span class="user-name">{{ vendorName }}</span>
+
+    </div>
+
+  </div>
+
+</header>
