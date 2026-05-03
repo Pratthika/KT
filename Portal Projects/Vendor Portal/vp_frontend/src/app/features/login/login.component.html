@@ -1,0 +1,128 @@
+<div class="login-shell">
+
+  <!-- Left Panel -->
+  <div class="login-left">
+    <div class="login-left-inner">
+      <div class="brand">
+        <div class="brand-logo">
+          <img src="/_KaarTech_logo-%20New.png" class="brand-logo-img">
+        </div>
+        <div>
+          <div class="brand-name">KaarTech</div>
+          <div class="brand-tagline">Vendor Portal</div>
+        </div>
+      </div>
+
+      <div class="login-hero">
+        <h1 class="hero-title">Welcome back,<br><span>Vendor Partner</span></h1>
+        <p class="hero-sub">Access your purchase orders, invoices, payments, and more — all in one place.</p>
+      </div>
+
+      <div class="feature-list">
+        <div class="feature-item">
+          <span class="feature-icon">📋</span>
+          <span>Track Purchase Orders in real-time</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">🧾</span>
+          <span>View & download invoices instantly</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">💰</span>
+          <span>Monitor payment status & ageing</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">📦</span>
+          <span>Goods receipt confirmation</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="left-decoration">
+      <div class="deco-circle c1"></div>
+      <div class="deco-circle c2"></div>
+      <div class="deco-circle c3"></div>
+    </div>
+  </div>
+
+  <!-- Right Panel -->
+  <div class="login-right">
+    <div class="login-card">
+
+      <div class="login-card-header">
+        <h2 class="card-title">Sign In</h2>
+        <p class="card-sub">Enter your credentials to continue</p>
+      </div>
+
+      <form (ngSubmit)="login()" #loginForm="ngForm" class="login-form" autocomplete="off">
+
+        <!-- Error -->
+        <div class="error-banner" *ngIf="error">
+          <span>⚠</span> {{ error }}
+        </div>
+
+        <!-- Vendor ID -->
+        <div class="form-group">
+          <label class="form-label">Vendor ID</label>
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="8" width="18" height="13" rx="2"/>
+                <path d="M8 8V5a4 4 0 018 0v3"/>
+              </svg>
+            </span>
+            <input
+              class="form-input"
+              type="text"
+              [(ngModel)]="vendorId"
+              name="vendorId"
+              placeholder="e.g. 1000"
+              autocomplete="off"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                <path d="M7 11V7a5 5 0 0110 0v4"/>
+              </svg>
+            </span>
+            <input
+              class="form-input"
+              [type]="showPass ? 'text' : 'password'"
+              [(ngModel)]="password"
+              name="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+            />
+            <button type="button" class="toggle-pass" (click)="showPass = !showPass">
+              {{ showPass ? '🙈' : '👁' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button class="login-btn" type="submit" [disabled]="loading">
+          <span *ngIf="!loading">Sign In →</span>
+          <span *ngIf="loading" class="spinner-wrap">
+            <span class="spin"></span> Verifying...
+          </span>
+        </button>
+
+      </form>
+
+      <div class="login-footer">
+        <p>For access issues, contact your <strong>KaarTech administrator</strong></p>
+      </div>
+
+    </div>
+  </div>
+
+</div>
