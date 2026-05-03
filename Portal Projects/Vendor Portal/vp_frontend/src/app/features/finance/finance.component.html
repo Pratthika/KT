@@ -1,0 +1,55 @@
+<div class="page-header flex-between fade-in-up">
+  <div>
+    <div class="page-title">Finance</div>
+    <div class="page-subtitle">Financial accounting documents for your vendor account</div>
+  </div>
+  <div class="flex gap-2">
+    <input class="kt-input" style="width:240px" placeholder="🔍  Search doc, text..." [(ngModel)]="search" (input)="onSearch()" />
+    <span class="kt-badge kt-badge-info" style="padding:8px 14px;font-size:12px">{{ filtered.length }} records</span>
+  </div>
+</div>
+
+<!-- Summary Strips -->
+<div class="finance-summary fade-in-up delay-1" *ngIf="!loading && !error">
+  <div class="summary-card credit">
+    <div class="s-label">Total Payable</div>
+    <div class="h4 mb-0 text-orange">{{ totalPayable | currency:'INR' }}</div>
+  </div>
+  
+  <div class="summary-card neutral">
+    <div class="s-label">Total Documents</div>
+    <div class="s-value">{{ records.length }}</div>
+  </div>
+</div>
+
+<div *ngIf="loading" class="skeleton" style="height:360px; border-radius:16px"></div>
+<div *ngIf="error" class="error-msg">⚠ {{ error }}</div>
+
+<div class="kt-card fade-in-up delay-2" *ngIf="!loading && !error">
+  <div *ngIf="filtered.length === 0" class="empty-state">
+    <div class="empty-state-icon">💳</div>
+    <div class="empty-state-title">No finance records found</div>
+  </div>
+  <div class="kt-table-wrap" *ngIf="filtered.length > 0">
+    <table class="kt-table">
+      <thead>
+        <tr>
+          <th>Document No.</th>
+          <th>Doc Type</th>
+          <th>Posting Date</th>
+          <th>Amount</th>
+          <th>Currency</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of filtered">
+          <td class="font-mono"><strong>{{ r.Belnr }}</strong></td>
+          <td><span class="kt-badge" [ngClass]="r.Blart === 'RE' ? 'kt-badge-success' : r.Blart === 'KG' ? 'kt-badge-danger' : 'kt-badge-gray'">{{ r.Blart || '—' }}</span></td>
+          <td>{{ formatDate(r.Budat) }}</td>
+          <td class="font-mono"><strong>{{ formatAmount(r.Wrbtr) }}</strong></td>
+          <td><span class="kt-badge kt-badge-info">{{ r.Waers }}</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
