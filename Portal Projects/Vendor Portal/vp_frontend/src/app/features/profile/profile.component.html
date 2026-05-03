@@ -1,0 +1,87 @@
+<div class="page-header fade-in-up">
+  <div class="page-title">My Profile</div>
+  <div class="page-subtitle">Your vendor registration details from SAP</div>
+</div>
+
+<div *ngIf="loading" class="skeleton" style="height:360px; border-radius:16px"></div>
+<div *ngIf="error" class="error-msg">⚠ {{ error }}</div>
+
+<ng-container *ngIf="!loading && !error && profile">
+
+  <!-- Profile Hero Card -->
+  <div class="profile-hero kt-card fade-in-up delay-1">
+    <div class="profile-banner"></div>
+    <div class="profile-body">
+      <div class="profile-avatar">{{ initials }}</div>
+      <div class="profile-meta">
+        <div class="profile-name">{{ profile.WfName1 || '—' }}</div>
+        <div class="profile-id">Vendor ID: <span class="font-mono text-orange">{{ profile.WfLifnr }}</span></div>
+        <div class="profile-location" *ngIf="profile.WfOrt01">
+          📍 {{ profile.WfOrt01 }}<span *ngIf="profile.WfLand1">, {{ profile.WfLand1 }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Details Grid -->
+  <div class="profile-grid fade-in-up delay-2">
+
+    <!-- Contact Information -->
+    <div class="kt-card">
+      <div class="kt-card-header">
+        <span class="kt-card-title">Contact Information</span>
+        <span class="detail-icon">📞</span>
+      </div>
+      <div class="kt-card-body">
+        <div class="detail-row">
+          <span class="detail-label">Phone</span>
+          <span class="detail-value">{{ profile.WfTelf1 || '—' }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Email</span>
+          <span class="detail-value">{{ profile.WfSmtpAddr || '—' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Address -->
+    <div class="kt-card">
+      <div class="kt-card-header">
+        <span class="kt-card-title">Address</span>
+        <span class="detail-icon">🏢</span>
+      </div>
+      <div class="kt-card-body">
+        <div class="detail-row">
+          <span class="detail-label">Street</span>
+          <span class="detail-value">{{ profile.WfStras || '—' }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">City</span>
+          <span class="detail-value">{{ profile.WfOrt01 || '—' }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Country</span>
+          <span class="detail-value">{{ profile.WfLand1 || '—' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SAP Info 
+    <div class="kt-card">
+      <div class="kt-card-header">
+        <span class="kt-card-title">SAP Account Details</span>
+        <span class="detail-icon">🔧</span>
+      </div>
+      <div class="kt-card-body">
+        <div class="detail-row" *ngFor="let key of extraKeys">
+          <span class="detail-label">{{ key }}</span>
+          <span class="detail-value font-mono">{{ profile[key] || '—' }}</span>
+        </div>
+        <div class="detail-row" *ngIf="extraKeys.length === 0">
+          <span class="text-muted" style="font-size:13px">No additional SAP fields</span>
+        </div>
+      </div>
+    </div>-->
+
+  </div>
+</ng-container>
