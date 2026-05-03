@@ -1,0 +1,62 @@
+<div class="page-header flex-between fade-in-up">
+  <div>
+    <div class="page-title">Payment Ageing</div>
+    <div class="page-subtitle">Track payment status and ageing buckets</div>
+  </div>
+  <div class="flex gap-2">
+    <input class="kt-input" style="width:220px" placeholder="🔍  Search document..." [(ngModel)]="search" (input)="onSearch()" />
+    <span class="kt-badge kt-badge-success" style="padding:8px 14px;font-size:12px">{{ filtered.length }} records</span>
+  </div>
+</div>
+
+<!-- Ageing Summary -->
+<div class="age-buckets fade-in-up delay-1" *ngIf="!loading && !error">
+  <div class="age-card">
+    <div class="age-label">0 – 30 Days</div>
+    <div class="age-count green">{{ bucketCount('0-30') }}</div>
+  </div>
+  <div class="age-card">
+    <div class="age-label">31 – 60 Days</div>
+    <div class="age-count blue">{{ bucketCount('31-60') }}</div>
+  </div>
+  <div class="age-card">
+    <div class="age-label">61 – 90 Days</div>
+    <div class="age-count amber">{{ bucketCount('61-90') }}</div>
+  </div>
+  <div class="age-card">
+    <div class="age-label">90+ Days</div>
+    <div class="age-count red">{{ bucketCount('90+') }}</div>
+  </div>
+</div>
+
+<div *ngIf="loading" class="skeleton" style="height:360px; border-radius:16px"></div>
+<div *ngIf="error" class="error-msg">⚠ {{ error }}</div>
+
+<div class="kt-card fade-in-up delay-2" *ngIf="!loading && !error">
+  <div *ngIf="filtered.length === 0" class="empty-state">
+    <div class="empty-state-icon">💰</div>
+    <div class="empty-state-title">No payment records found</div>
+  </div>
+  <div class="kt-table-wrap" *ngIf="filtered.length > 0">
+    <table class="kt-table">
+      <thead>
+        <tr>
+          <th>Document No.</th>
+          <th>Posting Date</th>
+          <th>Ageing</th>
+          <th>Amount</th>
+          <th>Currency</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of filtered">
+          <td class="font-mono"><strong>{{ r.Belnr }}</strong></td>
+          <td>{{ formatDate(r.Budat) }}</td>
+          <td><span class="kt-badge" [ngClass]="bucketClass(r.Budat)">{{ ageBucket(r.Budat) }} days</span></td>
+          <td class="font-mono"><strong>{{ r.Wrbtr }}</strong></td>
+          <td><span class="kt-badge kt-badge-info">{{ r.Waers }}</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
