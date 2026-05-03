@@ -1,0 +1,107 @@
+<aside class="sidebar" [class.collapsed]="collapsed">
+
+
+
+  <!-- Logo -->
+
+  <div class="sidebar-logo">
+
+    <div class="logo-mark">
+
+      <img src="/_KaarTech_logo-%20New.png">
+
+    </div>
+
+    <div class="logo-text" *ngIf="!collapsed">
+
+      <span class="logo-brand">KaarTech</span>
+
+      <span class="logo-sub">Vendor Portal</span>
+
+    </div>
+
+    <button class="collapse-btn" (click)="toggleCollapse.emit()" [title]="collapsed ? 'Expand' : 'Collapse'">
+
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+
+        <path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none" [attr.transform]="collapsed ? 'rotate(180 8 8)' : ''"/>
+
+      </svg>
+
+    </button>
+
+  </div>
+
+
+
+  <!-- Vendor Card -->
+
+  <div class="vendor-chip" *ngIf="!collapsed">
+
+    <div class="vendor-avatar">{{ vendorName[0] }}</div>
+
+    <div class="vendor-info">
+
+      <div class="vendor-name">{{ vendorName }}</div>
+
+      <div class="vendor-id">ID: {{ vendorId }}</div>
+
+    </div>
+
+  </div>
+
+  <div class="vendor-avatar-solo" *ngIf="collapsed" [title]="vendorName">
+
+    {{ vendorName[0] }}
+
+  </div>
+
+
+
+  <!-- Nav -->
+
+  <nav class="sidebar-nav">
+
+    <div class="nav-label" *ngIf="!collapsed">MENU</div>
+
+    <a
+
+      *ngFor="let item of navItems"
+
+      [routerLink]="item.route"
+
+      routerLinkActive="active"
+
+      class="nav-item"
+
+      [title]="collapsed ? item.label : ''"
+
+    >
+
+      <span class="nav-icon">{{ item.icon }}</span>
+
+      <span class="nav-label-text" *ngIf="!collapsed">{{ item.label }}</span>
+
+    </a>
+
+  </nav>
+
+
+
+  <!-- Logout -->
+
+  <div class="sidebar-footer">
+
+    <button class="logout-btn" (click)="logout()" [title]="collapsed ? 'Logout' : ''">
+
+      <span class="nav-icon">⏻</span>
+
+      <span *ngIf="!collapsed">Logout</span>
+
+    </button>
+
+  </div>
+
+
+
+</aside>
