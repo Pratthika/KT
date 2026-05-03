@@ -1,0 +1,139 @@
+<!-- Loading Skeleton -->
+<div *ngIf="loading" class="skeleton-wrap">
+  <div class="grid-4">
+    <div class="skeleton" style="height:110px; border-radius:16px"></div>
+    <div class="skeleton" style="height:110px; border-radius:16px"></div>
+    <div class="skeleton" style="height:110px; border-radius:16px"></div>
+    <div class="skeleton" style="height:110px; border-radius:16px"></div>
+  </div>
+  <div class="skeleton mt-6" style="height:280px; border-radius:16px"></div>
+</div>
+
+<ng-container *ngIf="!loading">
+
+  <!-- Welcome Banner -->
+  <div class="welcome-banner fade-in-up">
+    <div class="welcome-text">
+      <div class="welcome-greeting">Good day, <strong>{{ vendorName }}</strong> 👋</div>
+      <div class="welcome-sub">Here's a snapshot of your vendor activity today.</div>
+    </div>
+    <div class="welcome-id">
+      <span class="id-label">VENDOR ID</span>
+      <span class="id-val">{{ vendorId }}</span>
+    </div>
+  </div>
+
+  <!-- Stat Cards -->
+  <div class="grid-4 fade-in-up delay-1">
+    <div class="stat-card" (click)="navigate('/orders')" style="cursor:pointer">
+      <div class="stat-icon">📋</div>
+      <div class="stat-label">Purchase Orders</div>
+      <div class="stat-value">{{ stats.openPOs }}</div>
+      <div class="stat-sub">Active orders</div>
+    </div>
+    <div class="stat-card" (click)="navigate('/invoices')" style="cursor:pointer">
+      <div class="stat-icon">🧾</div>
+      <div class="stat-label">Invoices</div>
+      <div class="stat-value">{{ stats.pendingInvoices }}</div>
+      <div class="stat-sub">Total records</div>
+    </div>
+    <div class="stat-card" (click)="navigate('/goods')" style="cursor:pointer">
+      <div class="stat-icon">📦</div>
+      <div class="stat-label">Goods Receipts</div>
+      <div class="stat-value">{{ stats.goodsReceipts }}</div>
+      <div class="stat-sub">Received items</div>
+    </div>
+    <div class="stat-card" (click)="navigate('/rfq')" style="cursor:pointer">
+      <div class="stat-icon">📊</div>
+      <div class="stat-label">RFQ</div>
+      <div class="stat-value">{{ stats.openRfqs }}</div>
+      <div class="stat-sub">Quotation requests</div>
+    </div>
+  </div>
+
+  <!-- Bottom Grid -->
+  <div class="dashboard-bottom fade-in-up delay-2">
+
+    <!-- Recent Invoices -->
+    <div class="kt-card">
+      <div class="kt-card-header">
+        <span class="kt-card-title">Recent Invoices</span>
+        <button class="kt-btn kt-btn-ghost kt-btn-sm" (click)="navigate('/invoices')">View All →</button>
+      </div>
+      <div class="kt-card-body" style="padding:0">
+        <div *ngIf="recentInvoices.length === 0" class="empty-state">
+          <div class="empty-state-icon">🧾</div>
+          <div class="empty-state-title">No invoices found</div>
+        </div>
+        <table class="kt-table" *ngIf="recentInvoices.length > 0">
+          <thead>
+            <tr>
+              <th>Invoice No.</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Currency</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let inv of recentInvoices">
+              <td class="font-mono">{{ inv.Belnr }}</td>
+              <td>{{ formatDate(inv.Budat) }}</td>
+              <td><strong>{{ inv.Wrbtr }}</strong></td>
+              <td><span class="kt-badge kt-badge-info">{{ inv.Waers }}</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Recent POs -->
+    <div class="kt-card">
+      <div class="kt-card-header">
+        <span class="kt-card-title">Recent Purchase Orders</span>
+        <button class="kt-btn kt-btn-ghost kt-btn-sm" (click)="navigate('/orders')">View All →</button>
+      </div>
+      <div class="kt-card-body" style="padding:0">
+        <div *ngIf="recentPOs.length === 0" class="empty-state">
+          <div class="empty-state-icon">📋</div>
+          <div class="empty-state-title">No purchase orders found</div>
+        </div>
+        <table class="kt-table" *ngIf="recentPOs.length > 0">
+          <thead>
+            <tr>
+              <th>PO Number</th>
+              <th>Date</th>
+              <th>Item</th>
+              <th>Qty</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let po of recentPOs">
+              <td class="font-mono">{{ po.Ebeln }}</td>
+              <td>{{ formatDate(po.Bedat) }}</td>
+              <td class="td-truncate">{{ po.Txz01 || '—' }}</td>
+              <td>{{ po.Menge }} {{ po.Meins }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Quick Links -->
+  <div class="quick-links fade-in-up delay-3">
+    <div class="ql-title">Quick Access</div>
+    <div class="ql-grid">
+      <button class="ql-item" *ngFor="let link of [
+        {icon:'💳', label:'Finance',  route:'/finance'},
+        {icon:'💰', label:'Payments', route:'/payments'},
+        {icon:'📝', label:'Memos',    route:'/memos'},
+        {icon:'👤', label:'Profile',  route:'/profile'}
+      ]" (click)="navigate(link.route)">
+        <span class="ql-icon">{{ link.icon }}</span>
+        <span class="ql-label">{{ link.label }}</span>
+      </button>
+    </div>
+  </div>
+
+</ng-container>
