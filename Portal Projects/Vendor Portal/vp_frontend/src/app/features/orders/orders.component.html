@@ -1,0 +1,49 @@
+<div class="page-header flex-between fade-in-up">
+  <div>
+    <div class="page-title">Purchase Orders</div>
+    <div class="page-subtitle">All purchase orders raised for your vendor account</div>
+  </div>
+  <div class="flex gap-2">
+    <input class="kt-input" style="width:240px" placeholder="🔍  Search PO, material..." [(ngModel)]="search" (input)="onSearch()" />
+    <span class="kt-badge kt-badge-info" style="padding:8px 14px;font-size:12px">{{ filtered.length }} records</span>
+  </div>
+</div>
+
+<div *ngIf="loading" class="skeleton" style="height:360px; border-radius:16px"></div>
+
+<div *ngIf="error" class="error-msg">⚠ {{ error }}</div>
+
+<div class="kt-card fade-in-up delay-1" *ngIf="!loading && !error">
+  <div *ngIf="filtered.length === 0" class="empty-state">
+    <div class="empty-state-icon">📋</div>
+    <div class="empty-state-title">No purchase orders found</div>
+  </div>
+  <div class="kt-table-wrap" *ngIf="filtered.length > 0">
+    <table class="kt-table">
+      <thead>
+        <tr>
+          <th>PO Number</th>
+          <th>Date</th>
+          <th>Material</th>
+          <th>Description</th>
+          <th>Quantity</th>
+          <th>Unit</th>
+          <th>Net Price</th>
+          <th>Currency</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of filtered">
+          <td class="font-mono">{{ r.Ebeln }}</td>
+          <td>{{ formatDate(r.Bedat) }}</td>
+          <td class="font-mono text-muted">{{ r['Matnr'] || '—' }}</td>
+          <td>{{ r.Txz01 || '—' }}</td>
+          <td><strong>{{ r.Ktmng }}</strong></td>
+          <td>{{ r.Meins }}</td>
+          <td class="font-mono"><strong>{{ r.Netpr }}</strong></td>
+          <td><span class="kt-badge kt-badge-info">{{ r.Waers }}</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
