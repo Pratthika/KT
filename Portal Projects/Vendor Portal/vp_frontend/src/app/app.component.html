@@ -1,0 +1,19 @@
+<ng-container *ngIf="!isLoginPage && auth.isLoggedIn(); else plainOutlet">
+  <div class="vp-shell">
+    <app-sidebar
+      [collapsed]="sidebarCollapsed"
+      (toggleCollapse)="sidebarCollapsed = !sidebarCollapsed">
+    </app-sidebar>
+
+    <div class="vp-main" [class.sidebar-collapsed]="sidebarCollapsed">
+      <app-navbar [pageTitle]="pageTitle"></app-navbar>
+      <div class="vp-content">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #plainOutlet>
+  <router-outlet></router-outlet>
+</ng-template>
