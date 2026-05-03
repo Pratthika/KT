@@ -1,0 +1,44 @@
+<div class="page-header flex-between fade-in-up">
+  <div>
+    <div class="page-title">RFQ</div>
+    <div class="page-subtitle">Request for Quotation documents sent to your account</div>
+  </div>
+  <div class="flex gap-2">
+    <input class="kt-input" style="width:240px" placeholder="🔍  Search RFQ, material..." [(ngModel)]="search" (input)="onSearch()" />
+    <span class="kt-badge kt-badge-warning" style="padding:8px 14px;font-size:12px">{{ filtered.length }} records</span>
+  </div>
+</div>
+
+<div *ngIf="loading" class="skeleton" style="height:360px; border-radius:16px"></div>
+<div *ngIf="error" class="error-msg">⚠ {{ error }}</div>
+
+<div class="kt-card fade-in-up delay-1" *ngIf="!loading && !error">
+  <div *ngIf="filtered.length === 0" class="empty-state">
+    <div class="empty-state-icon">📊</div>
+    <div class="empty-state-title">No RFQ records found</div>
+  </div>
+  <div class="kt-table-wrap" *ngIf="filtered.length > 0">
+    <table class="kt-table">
+      <thead>
+        <tr>
+          <th>Purch Doc Number</th>
+          <th>PO Date</th>
+          <th>Material</th>
+          <th>Description</th>
+          <th>Quantity</th>
+          <th>Unit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of filtered">
+          <td class="font-mono"><strong>{{ r.Ebeln }}</strong></td>
+          <td>{{ formatDate(r.Bedat) }}</td>
+          <td class="font-mono text-muted">{{ r.Matnr || '—' }}</td>
+          <td>{{ r.Txz01 || '—' }}</td>
+          <td><strong>{{ r.Ktmng }}</strong></td>
+          <td>{{ r.Meins }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
