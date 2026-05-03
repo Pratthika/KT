@@ -1,0 +1,53 @@
+<div class="page-header flex-between fade-in-up">
+  <div>
+    <div class="page-title">Invoices</div>
+    <div class="page-subtitle">View and download your invoice documents</div>
+  </div>
+  <div class="flex gap-2">
+    <input class="kt-input" style="width:240px" placeholder="🔍  Search invoice no..." [(ngModel)]="search" (input)="onSearch()" />
+    <span class="kt-badge kt-badge-warning" style="padding:8px 14px;font-size:12px">{{ filtered.length }} records</span>
+  </div>
+</div>
+
+<div *ngIf="loading" class="skeleton" style="height:360px; border-radius:16px"></div>
+<div *ngIf="error" class="error-msg">⚠ {{ error }}</div>
+
+<div class="kt-card fade-in-up delay-1" *ngIf="!loading && !error">
+  <div *ngIf="filtered.length === 0" class="empty-state">
+    <div class="empty-state-icon">🧾</div>
+    <div class="empty-state-title">No invoices found</div>
+  </div>
+  <div class="kt-table-wrap" *ngIf="filtered.length > 0">
+    <table class="kt-table">
+      <thead>
+        <tr>
+          <th>Invoice No.</th>
+          <th>Doc Type</th>
+          <th>Posting Date</th>
+          <th>Amount</th>
+          <th>Currency</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of filtered">
+          <td class="font-mono"><strong>{{ r.Belnr }}</strong></td>
+          <td><span class="kt-badge kt-badge-gray">{{ r.Blart || '—' }}</span></td>
+          <td>{{ formatDate(r.Budat) }}</td>
+          <td class="font-mono"><strong>{{ r.Wrbtr }}</strong></td>
+          <td><span class="kt-badge kt-badge-info">{{ r.Waers }}</span></td>
+          <td>
+            <button
+              class="kt-btn kt-btn-primary kt-btn-sm"
+              (click)="downloadPdf(r.Belnr)"
+              [disabled]="downloadingId === r.Belnr"
+            >
+              <span *ngIf="downloadingId !== r.Belnr">⬇ PDF</span>
+              <span *ngIf="downloadingId === r.Belnr">⏳ ...</span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
