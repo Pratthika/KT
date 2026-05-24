@@ -1,0 +1,70 @@
+/* ── Google Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap');
+
+/* ── Design Tokens ── */
+:root {
+  --primary:       #2563eb;
+  --primary-dark:  #1d4ed8;
+  --primary-light: #eff6ff;
+  --accent:        #7c3aed;
+  --success:       #16a34a;
+  --warning:       #d97706;
+  --danger:        #dc2626;
+  --danger-light:  #fef2f2;
+
+  --bg:            #f8fafc;
+  --surface:       #ffffff;
+  --border:        #e2e8f0;
+  --text:          #0f172a;
+  --text-muted:    #64748b;
+}
+
+/* ── Reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+
+/* ── Layout ── */
+.app-body {
+  display: flex;
+  min-height: calc(100vh - 60px);
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
