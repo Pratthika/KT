@@ -1,0 +1,48 @@
+<div class="login-wrapper">
+  <div class="login-left">
+    <div class="brand">
+      <span class="brand-symbol">◈</span>
+      <h1>Employee Portal</h1>
+      <p>SAP-Integrated HR Self-Service</p>
+    </div>
+    <div class="decorative-grid">
+      <div *ngFor="let i of [1,2,3,4,5,6,7,8,9]" class="grid-cell"></div>
+    </div>
+  </div>
+
+  <div class="login-right">
+    <div class="login-card">
+      <h2>Welcome Back</h2>
+      <p class="subtitle">Sign in with your SAP credentials</p>
+
+      <div class="form-group">
+        <label>Employee ID</label>
+        <input
+          type="text"
+          [(ngModel)]="pernr"
+          placeholder="e.g. 10001234"
+          (keyup.enter)="onLogin()"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input
+          type="password"
+          [(ngModel)]="password"
+          placeholder="••••••••••"
+          (keyup.enter)="onLogin()"
+        />
+      </div>
+
+      <div class="error-msg" *ngIf="errorMsg">
+        <span>⚠</span> {{ errorMsg }}
+      </div>
+
+      <button class="login-btn" (click)="onLogin()" [disabled]="loading">
+        <span *ngIf="!loading">Sign In</span>
+        <span *ngIf="loading" class="spinner"></span>
+      </button>
+    </div>
+  </div>
+</div>
