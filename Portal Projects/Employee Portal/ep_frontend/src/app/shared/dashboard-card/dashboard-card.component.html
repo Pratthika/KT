@@ -1,0 +1,8 @@
+<div class="card" [ngClass]="color">
+  <div class="card-header">
+    <span class="card-icon">{{ icon }}</span>
+    <span class="card-title">{{ title }}</span>
+  </div>
+  <div class="card-value">{{ value }}</div>
+  <div class="card-subtitle" *ngIf="subtitle">{{ subtitle }}</div>
+</div>

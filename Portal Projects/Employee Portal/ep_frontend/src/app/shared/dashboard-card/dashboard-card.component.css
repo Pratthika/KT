@@ -1,0 +1,66 @@
+/* Main Card Container */
+.card {
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+/* Hover State */
+.card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Card Header Section */
+.card .card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.card .card-header .card-icon {
+  font-size: 1.3rem;
+}
+
+.card .card-header .card-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+/* Value and Subtitle */
+.card .card-value {
+  font-size: 2rem;
+  font-weight: 800;
+  font-family: 'Sora', sans-serif;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 0.35rem;
+}
+
+.card .card-subtitle {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Color Modifiers (using compound selectors) */
+.card.primary {
+  border-left: 4px solid var(--primary);
+}
+
+.card.accent {
+  border-left: 4px solid var(--accent);
+}
+
+.card.success {
+  border-left: 4px solid var(--success);
+}
+
+.card.warning {
+  border-left: 4px solid var(--warning);
+}
