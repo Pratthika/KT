@@ -1,0 +1,27 @@
+<div class="page-wrapper">
+  <div class="page-header">
+    <div>
+      <h1>Payslip PDF</h1>
+      <p class="subtitle">Adobe Form generated from SAP</p>
+    </div>
+    <button class="download-btn" (click)="download()" [disabled]="loading || !!error">
+      ⬇ &nbsp;Download PDF
+    </button>
+  </div>
+
+  <div class="loader-wrap" *ngIf="loading">
+    <div class="loader"></div>
+    <p>Generating your payslip...</p>
+  </div>
+
+  <div class="error-msg" *ngIf="error">⚠ {{ error }}</div>
+
+  <div class="pdf-viewer-wrap" *ngIf="pdfUrl && !loading">
+    <iframe
+      [src]="pdfUrl"
+      class="pdf-frame"
+      frameborder="0"
+      title="Payslip PDF"
+    ></iframe>
+  </div>
+</div>
