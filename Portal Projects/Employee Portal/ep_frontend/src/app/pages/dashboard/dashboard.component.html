@@ -1,0 +1,67 @@
+<div class="page-wrapper">
+  <div class="page-header">
+    <div>
+      <h1>Dashboard</h1>
+      <p class="greeting">Welcome back, <strong>{{ fullName || ('ID: ' + pernr) }}</strong></p>
+    </div>
+  </div>
+
+  <div class="cards-grid" *ngIf="!loading; else loadingTpl">
+    <app-dashboard-card
+      title="Employee ID"
+      [value]="pernr"
+      subtitle="SAP Personnel Number"
+      icon="◉"
+      color="primary"
+    ></app-dashboard-card>
+
+    <app-dashboard-card
+      title="Position"
+      [value]="position || '—'"
+      subtitle="Current Assignment"
+      icon="⊞"
+      color="accent"
+    ></app-dashboard-card>
+
+    <app-dashboard-card
+      title="Leave Taken"
+      [value]="totalLeaveDays + ' days'"
+      subtitle="Total absence days"
+      icon="◷"
+      color="warning"
+    ></app-dashboard-card>
+
+    <app-dashboard-card
+      title="Leave Balance"
+      [value]="leaveBalance"
+      subtitle="Remaining quota"
+      icon="✦"
+      color="success"
+    ></app-dashboard-card>
+
+    <app-dashboard-card
+      title="Basic Pay"
+      [value]="(basicPay | currency:'INR':'symbol':'1.2-2') || '0.00'"
+      subtitle="Current wage"
+      icon="◈"
+      color="primary"
+    ></app-dashboard-card>
+  </div>
+
+  <div class="quick-links">
+    <h3>Quick Access</h3>
+    <div class="links-row">
+      <a routerLink="/profile"    class="qlink">◉ My Profile</a>
+      <a routerLink="/leave"      class="qlink">◷ Leave Records</a>
+      <a routerLink="/payslip"    class="qlink">◈ Payslip</a>
+      <a routerLink="/payslippdf" class="qlink">⬡ Download PDF</a>
+    </div>
+  </div>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="loading-state">
+    <div class="loader"></div>
+    <p>Loading your data...</p>
+  </div>
+</ng-template>
