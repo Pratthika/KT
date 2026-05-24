@@ -1,0 +1,98 @@
+<div class="page-wrapper">
+  <div class="page-header">
+    <h1>Payslip</h1>
+    <p class="subtitle">Current pay period details from SAP</p>
+  </div>
+
+  <div class="loader-wrap" *ngIf="loading"><div class="loader"></div></div>
+  <div class="error-msg" *ngIf="error">⚠ {{ error }}</div>
+
+  <div class="payslip-layout" *ngIf="payslip && !loading">
+    <!-- Pay Summary -->
+    <div class="pay-hero">
+      <div class="pay-label">Basic Pay</div>
+      <div class="pay-amount">{{ payslip.BET01 | currency:'INR':'symbol':'1.2-2' }}</div>
+      <div class="pay-meta">
+        {{ payslip.LGTXT || payslip.LGA01 }} &nbsp;·&nbsp;
+        {{ formatDate(payslip.BEGDA) }} – {{ formatDate(payslip.ENDDA) }}
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <!-- Employment -->
+      <div class="info-card">
+        <h3>Employment Details</h3>
+        <div class="info-rows">
+          <div class="info-row">
+            <label>Position ID</label>
+            <span>{{ payslip.PLANS || '—' }}</span>
+          </div>
+          <div class="info-row">
+            <label>Wage Type</label>
+            <span>{{ payslip.LGA01 || '—' }}</span>
+          </div>
+          <div class="info-row">
+            <label>Wage Description</label>
+            <span>{{ payslip.LGTXT || '—' }}</span>
+          </div>
+          <div class="info-row">
+            <label>Valid From</label>
+            <span>{{ formatDate(payslip.BEGDA) }}</span>
+          </div>
+          <div class="info-row">
+            <label>Valid To</label>
+            <span>{{ formatDate(payslip.ENDDA) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Working Hours -->
+      <div class="info-card">
+        <h3>Working Schedule</h3>
+        <div class="info-rows">
+          <div class="info-row">
+            <label>Daily Working Hours</label>
+            <span>{{ payslip.ARBST || '—' }} hrs</span>
+          </div>
+          <div class="info-row">
+            <label>Work Days Per Week</label>
+            <span>{{ payslip.WKWDY || '—' }} days</span>
+          </div>
+          <div class="info-row">
+            <label>Weekly Hours</label>
+            <span>{{ (payslip.ARBST * payslip.WKWDY) | number:'1.1-1' }} hrs</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bank Details -->
+      <div class="info-card">
+        <h3>Bank Details</h3>
+        <div class="info-rows">
+          <div class="info-row">
+            <label>Bank Key</label>
+            <span>{{ payslip.BANKL || '—' }}</span>
+          </div>
+          <div class="info-row">
+            <label>Account Number</label>
+            <span class="masked">{{ maskBankAccount(payslip.BANKN) }}</span>
+          </div>
+          <div class="info-row">
+            <label>Bank Country</label>
+            <span>{{ payslip.BANKS || '—' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pdf-cta">
+      <a routerLink="/payslippdf" class="pdf-btn">
+        👁 &nbsp;View Payslip PDF
+      </a>
+    </div>
+
+  <div class="empty-state" *ngIf="!loading && !payslip && !error">
+    <span>◈</span>
+    <p>No payslip data available.</p>
+  </div>
+</div>
