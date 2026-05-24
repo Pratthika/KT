@@ -1,0 +1,53 @@
+<div class="page-wrapper">
+  <div class="page-header">
+    <div>
+      <h1>Leave Records</h1>
+      <p class="subtitle">Absence and quota information from SAP</p>
+    </div>
+    <div class="summary-pills" *ngIf="!loading && leaves.length">
+      <span class="pill warning">{{ totalDays }} days taken</span>
+      <span class="pill success">{{ leaveBalance }} remaining</span>
+    </div>
+  </div>
+
+  <div class="loader-wrap" *ngIf="loading">
+    <div class="loader"></div>
+  </div>
+  <div class="error-msg" *ngIf="error">⚠ {{ error }}</div>
+
+  <div class="table-card" *ngIf="!loading && leaves.length">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Leave Type</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Days</th>
+          <th>Hours</th>
+          <th>Quota</th>
+          <th>Subtype</th>
+          <th>Changed By</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let leave of leaves">
+          <td class="leave-type">
+            <span class="type-badge">{{ leave.ATEXT || leave.AWART }}</span>
+          </td>
+          <td>{{ formatDate(leave.BEGDA) }}</td>
+          <td>{{ formatDate(leave.ENDDA) }}</td>
+          <td><strong>{{ leave.ABWTG }}</strong></td>
+          <td>{{ leave.STDAZ }}</td>
+          <td>{{ leave.ANZHL }}</td>
+          <td>{{ leave.SUBTY || '—' }}</td>
+          <td class="uname">{{ leave.UNAME || '—' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && !leaves.length && !error">
+    <span>◷</span>
+    <p>No leave records found.</p>
+  </div>
+</div>
