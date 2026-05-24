@@ -1,0 +1,91 @@
+<div class="page-wrapper">
+  <div class="page-header">
+    <h1>My Profile</h1>
+    <p class="subtitle">Personal information from SAP HR</p>
+  </div>
+
+  <div class="loader-wrap" *ngIf="loading">
+    <div class="loader"></div>
+  </div>
+
+  <div class="error-msg" *ngIf="error">⚠ {{ error }}</div>
+
+  <div class="profile-layout" *ngIf="profile && !loading">
+    <!-- Avatar card -->
+    <div class="avatar-card">
+      <div class="avatar">
+        {{ (profile?.VORNA?.[0] || '') }}{{ (profile?.NACHN?.[0] || '') }}
+      </div>
+      <h2>{{ profile.VORNA }} {{ profile.NACHN }}</h2>
+      <span class="pernr-tag">ID: {{ profile.PERNR }}</span>
+      <div class="meta-row">
+        <span>{{ getGenderLabel(profile.GESCH) }}</span>
+        <span>·</span>
+        <span>{{ profile.NATIO }}</span>
+      </div>
+    </div>
+
+    <!-- Detail cards -->
+    <div class="detail-cards">
+      <div class="detail-card">
+        <h3>Personal Information</h3>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <label>First Name</label>
+            <span>{{ profile.VORNA || '—' }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Last Name</label>
+            <span>{{ profile.NACHN || '—' }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Date of Birth</label>
+            <span>{{ formatDate(profile.GBTAG) }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Gender</label>
+            <span>{{ getGenderLabel(profile.GESCH) }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Nationality</label>
+            <span>{{ profile.NATIO || '—' }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Language</label>
+            <span>{{ profile.SPRSL || '—' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-card">
+        <h3>Address Information</h3>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <label>City</label>
+            <span>{{ profile.ORT01 || '—' }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Postal Code</label>
+            <span>{{ profile.PSTLZ || '—' }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Country</label>
+            <span>{{ profile.LAND1 || '—' }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Location</label>
+            <span>{{ profile.LOCAT || '—' }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Valid From</label>
+            <span>{{ formatDate(profile.BEGDA) }}</span>
+          </div>
+          <div class="detail-item">
+            <label>Valid To</label>
+            <span>{{ formatDate(profile.ENDDA) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
